@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: first-replicaset
+  labels:
+    app: mylabel
+    tier: frontend
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mylabel
+      tier: frontend
+
+  template:
+    metadata:
+      labels:
+        app: mylabel
+        tier: frontend
+
+    spec:
+      containers:
+      - name: frontend-container
+        image: nginx

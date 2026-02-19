@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: elearn-backend
+        image: dimagrakh.azurecr.io/elearn-backend:v1
+        ports:
+        - containerPort: 8080  # CORRECTED: Logs ke mutabiq 80 se 8080 kiya
+        env:
+        - name: ConnectionStrings__MongoDb
+          value: "mongodb://mongodb-service:27017"
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8080       # Ingress is port par dhoondhega
+      targetPort: 8080 # Pod is port par sune-ga
